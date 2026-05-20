@@ -1,4 +1,4 @@
-、<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -130,72 +130,78 @@
       margin-top: .6rem;
     }
 
-    .vlog {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-
-    .vlog video {
-      width: 100%;
-      aspect-ratio: 16/9;
-      display: block;
-      border-radius: 12px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(var(--glass-blur));
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-    }
-
-    .vlog video:hover {
-      transform: scale(1.03) rotate(1deg);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
-    }
-
-    .vlog p {
-      margin-top: 1rem;
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #444;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding: .8rem 1.6rem;
-      background: var(--accent-red);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: var(--neumo-shadow);
-      transition: var(--transition);
-    }
-
-    .btn:hover {
-      transform: scale(1.03) rotate(-1deg);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
-    }
-
+    /* =============== 核心修改：四行滑动式布局 =============== */
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      /* 固定 4 行 */
+      grid-template-rows: repeat(4, auto);
+      /* 横向流动（内容满了当前列就自动换到下一列，产生横向滚动） */
+      grid-auto-flow: column;
+      /* 设定每列的固定宽度，可以根据需要调整 */
+      grid-auto-columns: 280px; 
       gap: 1.5rem;
-      padding: 0 1rem;
+      padding: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
     }
 
-    .video-grid .vlog-item {
-      flex: none;
-      scroll-snap-align: none;
+    /* 自定义滚动条样式使其更加美观 */
+    .video-grid::-webkit-scrollbar,
+    .carousel::-webkit-scrollbar {
+      height: 8px;
+    }
+    .video-grid::-webkit-scrollbar-track,
+    .carousel::-webkit-scrollbar-track {
+      background: rgba(195, 26, 30, 0.05);
+      border-radius: 4px;
+    }
+    .video-grid::-webkit-scrollbar-thumb,
+    .carousel::-webkit-scrollbar-thumb {
+      background: var(--accent-red);
+      border-radius: 4px;
+    }
+
+    .vlog-item {
+      scroll-snap-align: center;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .vlog-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+    }
+
+    .vlog-item video {
       width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      background: #000;
+      outline: none;
+      border: none;
+    }
+
+    .vlog-item p {
+      margin-top: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.4;
+      font-size: 0.95rem;
     }
 
     .carousel {
       display: flex;
       overflow-x: auto;
       gap: 1rem;
-      padding: 0 1rem;
+      padding: 1rem;
       scroll-snap-type: x mandatory;
     }
 
@@ -208,6 +214,7 @@
       box-shadow: var(--shadow);
       scroll-snap-align: center;
       transition: var(--transition);
+      object-fit: cover;
     }
 
     .carousel img:hover {
@@ -293,50 +300,9 @@
       }
     }
 
-    .vlog-item {
-      flex: 0 0 300px;
-      scroll-snap-align: center;
-      background: var(--glass-bg);
-      backdrop-filter: blur(var(--glass-blur));
-      border-radius: 12px;
-      padding: 1rem;
-      box-shadow: var(--shadow);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .vlog-item:hover {
-      transform: scale(1.02);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
-    }
-
-    .vlog-item video {
-      width: 100%;
-      aspect-ratio: 16/9;
-      border-radius: 8px;
-      background: #000;
-      outline: none;
-      border: none;
-    }
-
-    .vlog-item p {
-      margin-top: 0.8rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      line-height: 1.4;
-      font-size: 0.95rem;
-    }
-
-    @media(max-width: 1400px) {
-      .video-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    @media(max-width: 1100px) {
-      .video-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    /* 响应式调整 */
+    @media(max-width: 1200px) {
+      /* 如果要在平板上保持四行，可以去掉这个覆写，或者根据需要调整 */
     }
 
     @media(max-width:768px) {
@@ -344,24 +310,38 @@
         flex-direction: column;
         gap: .8rem;
       }
-
-      .video-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .carousel img,
-      .vlog-item {
+      .carousel img {
         flex: 0 0 85%;
       }
-
       header {
         padding: 3rem 0.5rem;
       }
     }
 
     @media(max-width:480px) {
+      /* 手机竖屏：保持4行，每行5个视频 */
       .video-grid {
-        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        grid-auto-flow: row;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.3rem;
+        padding: 0.5rem;
+        overflow-x: auto;
+      }
+
+      .vlog-item {
+        padding: 0.3rem;
+        border-radius: 6px;
+      }
+
+      .vlog-item p {
+        font-size: 0.55rem;
+        margin-top: 0.3rem;
+        line-height: 1.2;
+      }
+      
+      .vlog-item video {
+        border-radius: 4px;
       }
     }
   </style>
@@ -382,8 +362,8 @@
 
   <section class="section" data-delay="0">
     <header>
-      <h1>寻访红色根脉，凝聚学风力量</h1>
-      <h2>上海电机学院·第二小组 王宇（督导） 吴梦涵（组长）</h2>
+      <h1>研学寻红脉，聚力砺初心</h1>
+      <h2>上海电机学院第二小组 王宇（督导） 吴梦涵（组长）</h2>
     </header>
   </section>
 
@@ -534,16 +514,16 @@
   <section id="group_discussion" class="section carousel-section" data-delay="3">
     <h3 class="section-title">小组讨论</h3>
     <div class="carousel">
-      <img src="11.png" alt="小组讨论照片1">
-      <img src="12.png" alt="小组讨论照片2">
-      <img src="13.png" alt="小组讨论照片3">
-      <img src="14.png" alt="小组讨论照片4">
-      <img src="15.png" alt="小组讨论照片5">
-      <img src="16.png" alt="小组讨论照片6">
-      <img src="17.png" alt="小组讨论照片7">
-      <img src="18.png" alt="小组讨论照片8">
-      <img src="19.png" alt="小组讨论照片9">
-      <img src="20.png" alt="小组讨论照片10">
+      <img src="11.jpg" alt="小组讨论照片1">
+      <img src="12.jpg" alt="小组讨论照片2">
+      <img src="13.jpg" alt="小组讨论照片3">
+      <img src="14.jpg" alt="小组讨论照片4">
+      <img src="15.jpg" alt="小组讨论照片5">
+      <img src="16.jpg" alt="小组讨论照片6">
+      <img src="17.jpg" alt="小组讨论照片7">
+      <img src="18.jpg" alt="小组讨论照片8">
+      <img src="19.jpg" alt="小组讨论照片9">
+      <img src="20.jpg" alt="小组讨论照片10">
     </div>
   </section>
 
@@ -576,7 +556,6 @@
     <p>督导：王宇</p>
     <p>组长：吴梦涵</p>
     <p>制作人：罗梓杰 吴梦涵</p>
-    <p>小组成员：罗梓杰&nbsp;&nbsp;（占位）</p>
     <p class="small">© 2026 上海电机学院 红色研学成果展示</p>
   </footer>
 
@@ -609,6 +588,15 @@
           p.innerText = "⚠️ 播放失败: " + errorMsg;
           // 插入到视频标签的后面
           vid.parentNode.insertBefore(p, vid.nextSibling);
+        }
+      });
+    });
+
+    // 添加图片加载失败的默认占位图处理
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', function () {
+        if (this.src.indexOf('content.jpg') === -1) {
+          this.src = 'content.jpg';
         }
       });
     });
