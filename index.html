@@ -130,18 +130,12 @@
       margin-top: .6rem;
     }
 
-    /* =============== 核心修改：四行滑动式布局 =============== */
+    /* =============== 核心修改：一行横向滑动式布局 =============== */
     .video-grid {
-      display: grid;
-      /* 固定 4 行 */
-      grid-template-rows: repeat(4, auto);
-      /* 横向流动（内容满了当前列就自动换到下一列，产生横向滚动） */
-      grid-auto-flow: column;
-      /* 设定每列的固定宽度，可以根据需要调整 */
-      grid-auto-columns: 280px; 
+      display: flex;
+      overflow-x: auto;
       gap: 1.5rem;
       padding: 1rem;
-      overflow-x: auto;
       scroll-snap-type: x mandatory;
     }
 
@@ -162,6 +156,7 @@
     }
 
     .vlog-item {
+      flex: 0 0 300px; /* 电脑端每项宽度 */
       scroll-snap-align: center;
       background: var(--glass-bg);
       backdrop-filter: blur(var(--glass-blur));
@@ -302,7 +297,9 @@
 
     /* 响应式调整 */
     @media(max-width: 1200px) {
-      /* 如果要在平板上保持四行，可以去掉这个覆写，或者根据需要调整 */
+      .vlog-item {
+        flex: 0 0 280px;
+      }
     }
 
     @media(max-width:768px) {
@@ -316,32 +313,29 @@
       header {
         padding: 3rem 0.5rem;
       }
+      .vlog-item {
+        flex: 0 0 60%;
+      }
     }
 
     @media(max-width:480px) {
-      /* 手机竖屏：保持4行，每行5个视频 */
+      /* 手机竖屏：一行滑动，每个视频占屏幕约 85% 以透出下一个视频的边缘 */
       .video-grid {
-        grid-template-rows: repeat(4, auto);
-        grid-auto-flow: row;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 0.3rem;
+        gap: 1rem;
         padding: 0.5rem;
-        overflow-x: auto;
       }
-
       .vlog-item {
-        padding: 0.3rem;
-        border-radius: 6px;
+        flex: 0 0 85%; 
+        padding: 0.8rem;
+        border-radius: 12px;
       }
-
       .vlog-item p {
-        font-size: 0.55rem;
-        margin-top: 0.3rem;
-        line-height: 1.2;
+        font-size: 0.95rem; /* 恢复正常大小 */
+        margin-top: 0.8rem;
+        line-height: 1.4;
       }
-      
       .vlog-item video {
-        border-radius: 4px;
+        border-radius: 8px;
       }
     }
   </style>
