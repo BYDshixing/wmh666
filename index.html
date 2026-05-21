@@ -130,9 +130,11 @@
       margin-top: .6rem;
     }
 
-    /* =============== 核心修改：一行横向滑动式布局 =============== */
+    /* =============== 核心修改：绝对单行横向滑动 ================ */
     .video-grid {
-      display: flex;
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: 1fr;
       overflow-x: auto;
       gap: 1.5rem;
       padding: 1rem;
@@ -156,7 +158,7 @@
     }
 
     .vlog-item {
-      flex: 0 0 300px; /* 电脑端每项宽度 */
+      width: 300px; /* 电脑端固定宽度，由于是 grid column 它会在一行里无限延伸 */
       scroll-snap-align: center;
       background: var(--glass-bg);
       backdrop-filter: blur(var(--glass-blur));
@@ -284,12 +286,10 @@
     }
 
     @keyframes float {
-
       0%,
       100% {
         transform: translateY(0);
       }
-
       50% {
         transform: translateY(-20px);
       }
@@ -298,7 +298,7 @@
     /* 响应式调整 */
     @media(max-width: 1200px) {
       .vlog-item {
-        flex: 0 0 280px;
+        width: 280px;
       }
     }
 
@@ -314,23 +314,23 @@
         padding: 3rem 0.5rem;
       }
       .vlog-item {
-        flex: 0 0 60%;
+        width: 60vw;
       }
     }
 
     @media(max-width:480px) {
-      /* 手机竖屏：一行滑动，每个视频占屏幕约 85% 以透出下一个视频的边缘 */
+      /* 手机竖屏：单行横滑，视口占比 85vw */
       .video-grid {
         gap: 1rem;
         padding: 0.5rem;
       }
       .vlog-item {
-        flex: 0 0 85%; 
+        width: 85vw; /* 让每个视频占据 85% 的屏幕宽度，下一个视频露出一角 */
         padding: 0.8rem;
         border-radius: 12px;
       }
       .vlog-item p {
-        font-size: 0.95rem; /* 恢复正常大小 */
+        font-size: 0.95rem;
         margin-top: 0.8rem;
         line-height: 1.4;
       }
